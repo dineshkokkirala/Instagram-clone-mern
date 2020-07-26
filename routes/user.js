@@ -74,6 +74,7 @@ router.get("/", auth, async (req, res) => {
   try {
     let user = await User.findById(req.user).select("-password");
     res.json(user);
+    // console.log(req.user);
   } catch (err) {
     console.log(err.message);
     return res.status(500).send("Internal Server Error");
