@@ -31,6 +31,7 @@ router.post("/register", async (req, res) => {
     let salt = await bcrytpjs.genSalt(10);
     user.password = await bcrytpjs.hash(password, salt);
     await user.save();
+    // res.json({ message: "Saved Successfully" });
 
     // const payload={
     //     user:{
@@ -40,7 +41,7 @@ router.post("/register", async (req, res) => {
 
     jwt.sign({ _id: user._id }, secret, { expiresIn: 3600 }, (err, token) => {
       if (err) throw err;
-      res.json({ token });
+      res.json({ token, message: "Saved Successfully" });
     });
   } catch (err) {
     console.log(err.message);
