@@ -1,93 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const Home = () => {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch("/api/post/allposts", {
+      headers: {
+        "auth-token": localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setData(result.posts);
+      });
+  }, []);
+
   return (
     <div className="home">
-      <div className="card home-card">
-        <h5>Dinesh</h5>
-        <div className="card-image">
-          <img
-            src="https://cdn.pixabay.com/photo/2017/04/05/01/15/ocean-2203720__340.jpg"
-            alt="img1"
-          />
-        </div>
-        <div className="card-content">
-          <i className="material-icons" style={{ color: "red" }}>
-            favorite
-          </i>
-          <h6>Title1</h6>
-          <p>Amazing post for this situation</p>
-          <input type="text" placeholder="Add a Comment" />
-        </div>
-      </div>
-      <div className="card home-card">
-        <h5>Dinesh</h5>
-        <div className="card-image">
-          <img
-            src="https://cdn.pixabay.com/photo/2017/04/05/01/15/ocean-2203720__340.jpg"
-            alt="img1"
-          />
-        </div>
-        <div className="card-content">
-          <i className="material-icons" style={{ color: "red" }}>
-            favorite
-          </i>
-          <h6>Title1</h6>
-          <p>Amazing post for this situation</p>
-          <input type="text" placeholder="Add a Comment" />
-        </div>
-      </div>
-      <div className="card home-card">
-        <h5>Dinesh</h5>
-        <div className="card-image">
-          <img
-            src="https://cdn.pixabay.com/photo/2017/04/05/01/15/ocean-2203720__340.jpg"
-            alt="img1"
-          />
-        </div>
-        <div className="card-content">
-          <i className="material-icons" style={{ color: "red" }}>
-            favorite
-          </i>
-          <h6>Title1</h6>
-          <p>Amazing post for this situation</p>
-          <input type="text" placeholder="Add a Comment" />
-        </div>
-      </div>
-      <div className="card home-card">
-        <h5>Dinesh</h5>
-        <div className="card-image">
-          <img
-            src="https://cdn.pixabay.com/photo/2017/04/05/01/15/ocean-2203720__340.jpg"
-            alt="img1"
-          />
-        </div>
-        <div className="card-content">
-          <i className="material-icons" style={{ color: "red" }}>
-            favorite
-          </i>
-          <h6>Title1</h6>
-          <p>Amazing post for this situation</p>
-          <input type="text" placeholder="Add a Comment" />
-        </div>
-      </div>
-      <div className="card home-card">
-        <h5>Dinesh</h5>
-        <div className="card-image">
-          <img
-            src="https://cdn.pixabay.com/photo/2017/04/05/01/15/ocean-2203720__340.jpg"
-            alt="img1"
-          />
-        </div>
-        <div className="card-content">
-          <i className="material-icons" style={{ color: "red" }}>
-            favorite
-          </i>
-          <h6>Title1</h6>
-          <p>Amazing post for this situation</p>
-          <input type="text" placeholder="Add a Comment" />
-        </div>
-      </div>
+      {data.map((item) => {
+        return (
+          <div className="card home-card" key={item._id}>
+            <h5>{item.postedBy.name}</h5>
+            <div className="card-image">
+              <img src={item.photo} alt={item._id} />
+            </div>
+            <div className="card-content">
+              <i className="material-icons" style={{ color: "red" }}>
+                favorite
+              </i>
+              <h6>{item.title}</h6>
+              <p>{item.body}</p>
+              <input type="text" placeholder="Add a Comment" />
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };
