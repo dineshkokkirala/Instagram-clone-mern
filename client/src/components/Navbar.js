@@ -9,7 +9,7 @@ const Navbar = () => {
           <Link to="/" className="brand-logo left">
             Instagram
           </Link>
-          <ul id="nav-mobile" className="right hide-on-med-and-down">
+          <ul id="nav-mobile" className="right">
             <li>
               <Link to="/login">Login</Link>
             </li>

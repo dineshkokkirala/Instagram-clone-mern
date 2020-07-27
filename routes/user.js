@@ -60,9 +60,14 @@ router.post("/login", async (req, res) => {
     if (!user) return res.status(401).json({ error: "Invalid Credentials" });
     let isMatch = await bcrytpjs.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ error: "Invalid Credentials" });
+    // const { _id, name, email } = user;
     jwt.sign({ _id: user._id }, secret, { expiresIn: 3600 }, (err, token) => {
       if (err) throw err;
-      res.json({ token });
+
+      res.json({
+        token,
+        user: { _id: user._id, name: user.name, email: user.email },
+      });
     });
   } catch (err) {
     console.log(err.message);
