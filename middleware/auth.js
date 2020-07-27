@@ -5,8 +5,7 @@ const User = require("../models/User");
 const auth = async (req, res, next) => {
   let token = req.header("auth-token");
 
-  if (!token)
-    return res.status(401).json({ error: "No token! Authorization Denied" });
+  if (!token) return res.status(401).json({ error: "You have to loggedIn" });
 
   try {
     const decoded = jwt.verify(token, config.get("jwtsecret"));
