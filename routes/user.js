@@ -39,7 +39,7 @@ router.post("/register", async (req, res) => {
     //     }
     // }
 
-    jwt.sign({ _id: user._id }, secret, { expiresIn: 3600 }, (err, token) => {
+    jwt.sign({ _id: user._id }, secret, { expiresIn: 360000 }, (err, token) => {
       if (err) throw err;
       res.json({ token, message: "Saved Successfully" });
     });
@@ -61,7 +61,7 @@ router.post("/login", async (req, res) => {
     let isMatch = await bcrytpjs.compare(password, user.password);
     if (!isMatch) return res.status(401).json({ error: "Invalid Credentials" });
     // const { _id, name, email } = user;
-    jwt.sign({ _id: user._id }, secret, { expiresIn: 3600 }, (err, token) => {
+    jwt.sign({ _id: user._id }, secret, { expiresIn: 360000 }, (err, token) => {
       if (err) throw err;
 
       res.json({
