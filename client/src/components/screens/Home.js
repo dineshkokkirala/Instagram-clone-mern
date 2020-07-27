@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
+import M from "materialize-css";
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -14,7 +15,7 @@ const Home = () => {
       .then((result) => {
         setData(result.posts);
       });
-  }, []);
+  }, [data]);
 
   const likePost = (id) => {
     fetch("/api/post/like", {
@@ -93,12 +94,37 @@ const Home = () => {
       .catch((err) => console.log(err));
   };
 
+  const deletePost = (id) => {
+    fetch(`/api/post/delete/${id}`, {
+      method: "delete",
+      headers: {
+        "auth-token": localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        const newData = data.filter((item) => {
+          return item._id !== result._id;
+        });
+        setData(newData);
+        M.toast({ html: result.message, classes: "#43a047 green darken-1" });
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="home">
       {data.map((item) => {
         return (
           <div className="card home-card" key={item._id}>
-            <h5>{item.postedBy.name}</h5>
+            <h5>{item.postedBy.name}</h5>{" "}
+            {item.postedBy._id === state._id && (
+              <button onClick={() => deletePost(item._id)}>
+                <i className="material-icons" style={{ float: "right" }}>
+                  delete
+                </i>
+              </button>
+            )}
             <div className="card-image">
               <img src={item.photo} alt={item._id} />
             </div>
