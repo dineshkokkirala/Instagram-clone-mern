@@ -25,7 +25,7 @@ const Routing = () => {
         type: "USER",
         payload: user,
       });
-      history.push("/");
+      // history.push("/");
     } else {
       history.push("/login");
     }
