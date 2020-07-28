@@ -138,4 +138,22 @@ router.delete("/delete/:postId", auth, (req, res) => {
     });
 });
 
+router.delete("/delete/comment/:commentId", auth, (req, res) => {
+  Post.findOne({ _id: req.params.commentId })
+    .populate("postedBy", "_id")
+    .exec((err, comment) => {
+      if (err || !comment) {
+        return res.status(422).json({ error: err });
+      }
+      if (comment.postedBy._id.toString() === req.user._id.toString()) {
+        comment
+          .remove()
+          .then((result) => {
+            res.json({ result, message: "Comment Deleted Successfully" });
+          })
+          .catch((err) => console.log(err));
+      }
+    });
+});
+
 module.exports = router;

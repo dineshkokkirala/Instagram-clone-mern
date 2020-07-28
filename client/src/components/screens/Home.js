@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../App";
 import M from "materialize-css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -39,6 +40,7 @@ const Home = () => {
           }
         });
         setData(newData);
+        // console.log(data);
       })
       .catch((err) => console.log(err));
   };
@@ -112,12 +114,43 @@ const Home = () => {
       .catch((err) => console.log(err));
   };
 
+  const deleteComment = (id) => {
+    // console.log("deleted");
+    fetch(`/api/post/delete/comment/${id}`, {
+      method: "delete",
+      headers: {
+        "auth-token": localStorage.getItem("jwt"),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        const newData = data.comments.filter((item) => {
+          return item.comments._id !== result._id;
+        });
+        setData(newData);
+        M.toast({ html: "Deleted", classes: "#43a047 green darken-1" });
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="home">
       {data.map((item) => {
+        // console.log(item);
         return (
           <div className="card home-card" key={item._id}>
-            <h5>{item.postedBy.name}</h5>{" "}
+            <h5>
+              <Link
+                to={
+                  item.postedBy._id !== state._id
+                    ? "/profile/" + item.postedBy._id
+                    : "/profile"
+                }
+              >
+                {" "}
+                {item.postedBy.name}
+              </Link>
+            </h5>{" "}
             {item.postedBy._id === state._id && (
               <button onClick={() => deletePost(item._id)}>
                 <i className="material-icons" style={{ float: "right" }}>
@@ -161,6 +194,15 @@ const Home = () => {
                       {record.postedBy.name}
                     </span>{" "}
                     : {record.text}{" "}
+                    {/* {record.postedBy._id === state._id && (
+                      <i
+                        className="material-icons"
+                        style={{ float: "right", cursor: "pointer" }}
+                        onClick={() => deleteComment(record._id)}
+                      >
+                        delete
+                      </i>
+                    )} */}
                   </h6>
                 );
               })}
