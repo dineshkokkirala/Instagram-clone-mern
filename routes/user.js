@@ -76,18 +76,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//get loggedIn user
-router.get("/", auth, async (req, res) => {
-  try {
-    let user = await User.findById(req.user).select("-password");
-    res.json(user);
-    // console.log(req.user);
-  } catch (err) {
-    console.log(err.message);
-    return res.status(500).send("Internal Server Error");
-  }
-});
-
 router.get("/:id", auth, (req, res) => {
   User.findOne({ _id: req.params.id })
     .select("-password")
@@ -105,5 +93,19 @@ router.get("/:id", auth, (req, res) => {
       return res.status(404).json({ error: "User not found" });
     });
 });
+
+//get loggedIn user
+router.get("/", auth, async (req, res) => {
+  try {
+    let user = await User.findById(req.user).select("-password");
+    res.json(user);
+    // console.log(req.user);
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+
 
 module.exports = router;
